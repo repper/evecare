@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "532583941316",
+    "project_id": "evecare-e6ae9",
+    "storage_bucket": "evecare-e6ae9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532583941316:android:66db44f7976bd1480db591",
+        "android_client_info": {
+          "package_name": "com.evecare.health"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532583941316-1n8k928l1gv7kjj2r08o5j268l9fpeoq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evecare.health",
+            "certificate_hash": "7e3ae085fcf708f0b516556e861c6d1690474f67"
+          }
+        },
+        {
+          "client_id": "532583941316-31hf8rjcu0qho33haplud7kfm5nrls6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evecare.health",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "532583941316-6the55d5ac4ehkc6sjol97m79c80iijc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evecare.health",
+            "certificate_hash": "1b5f8636ac698c5e2ae847f15e82f494c9766cf5"
+          }
+        },
+        {
+          "client_id": "532583941316-ehes5n9gol5f35g70n9v6l0e36uv038g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqWTW52f5o22WJhdeSyoy05sRukC40iI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532583941316-ehes5n9gol5f35g70n9v6l0e36uv038g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "532583941316-5hfu9sih9esbuapf7a9onq4pjlu877o8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.evecare.health"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

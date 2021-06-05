@@ -1,0 +1,2 @@
+import ReportPredictionsHistoryContainer from './reportPredictionsHistoryContainer';
+export default ReportPredictionsHistoryContainer;

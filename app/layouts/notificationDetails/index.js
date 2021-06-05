@@ -1,0 +1,2 @@
+import NotificationDetailsContainer from './notificationDetailsContainer';
+export default NotificationDetailsContainer;
