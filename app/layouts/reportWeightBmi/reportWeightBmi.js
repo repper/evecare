@@ -10,7 +10,16 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Shadow, ShadowFlex} from 'react-native-neomorph-shadows';
-import {VictoryChart, VictoryTheme, VictoryArea, VictoryScatter, VictoryZoomContainer} from 'victory-native';
+import {
+  VictoryChart,
+  VictoryTheme,
+  VictoryArea,
+  VictoryScatter,
+  VictoryLabel,
+  VictoryAxis,
+  VictoryZoomContainer,
+} from 'victory-native';
+import moment from 'moment';
 
 import Icon from '../../fonts/eveCareFont';
 import {colors, textStyles, globalStyle as gs} from '../../config/styles';
@@ -74,7 +83,6 @@ const ReportWeightBmi = props => {
   }
   const listItems = getRowsAndItems(loggedSymptopms);
 
-  console.log('222', props.dataArray && props.dataArray.length > 0);
   return (
     <SafeAreaView style={gs.safeArea}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1}}>
@@ -106,7 +114,7 @@ const ReportWeightBmi = props => {
                       {`${props.lastWeightConv} ${props.units.weight}`}
                     </PoppinsTextMedium>
                     <PoppinsTextMedium color={26} fontSize={13} style={{opacity: 0.5}}>
-                      as on {props.lastWeightDay}
+                      as on {`${moment(props.lastWeightDay).format('DD-MMM')}`}
                     </PoppinsTextMedium>
                   </View>
                 ) : (
@@ -141,44 +149,68 @@ const ReportWeightBmi = props => {
                 </View>
               </View>
               {props.dataArray.length > 0 ? (
-                <VictoryChart
-                  domain={{y: [0, 90]}}
-                  theme={VictoryTheme.material}
-                  height={300}
-                  width={width}
-                  containerComponent={
-                    <VictoryZoomContainer
-                      responsive={false}
-                      zoomDimension="x"
-                      zoomDomain={props.zoomDomain}
-                      onZoomDomainChange={props.handleZoom}
+                <View style={{paddingLeft: moderateScale(10)}}>
+                  <VictoryChart
+                    domain={{y: [0, 90]}}
+                    theme={VictoryTheme.material}
+                    height={moderateScale(300)}
+                    width={width - moderateScale(10)}
+                    containerComponent={
+                      <VictoryZoomContainer
+                        responsive={false}
+                        zoomDimension="x"
+                        zoomDomain={props.zoomDomain}
+                        onZoomDomainChange={props.handleZoom}
+                      />
+                    }
+                  >
+                    <VictoryAxis
+                      standalone={false}
+                      tickValues={props.xAxisValues}
+                      tickFormat={t => moment.unix(t).format('D')}
+                      label="Date"
+                      axisLabelComponent={<VictoryLabel dy={moderateScale(20)} />}
                     />
-                  }
-                >
-                  <VictoryArea
-                    data={props.dataArray}
-                    x="x"
-                    y="y"
-                    style={{
-                      data: {
-                        fill: 'transparent', //'url(#gradientStroke)',
-                        stroke: '#ff2e57',
-                        strokeWidth: 2,
-                      },
-                    }}
-                    domain={[0, 2]}
-                    labels={({datum}) => datum.y}
-                    interpolation="natural"
-                  />
+                    <VictoryAxis
+                      dependentAxis
+                      standalone={false}
+                      label="Weight (kgs)"
+                      axisLabelComponent={<VictoryLabel dy={moderateScale(-30)} />}
+                    />
+                    <VictoryAxis
+                      standalone={true}
+                      tickValues={props.xAxisValues}
+                      tickFormat={t =>
+                        moment.unix(t).format('D') === '1' ? moment.unix(t).format('MMM') : ''
+                      }
+                      orientation="top"
+                      style={{
+                        grid: {stroke: 'transparent'},
+                        axis: {stroke: 'transparent'},
+                        ticks: {stroke: 'transparent'},
+                      }}
+                    />
+                    <VictoryArea
+                      data={props.dataArray}
+                      style={{
+                        data: {
+                          fill: 'transparent', //'url(#gradientStroke)',
+                          stroke: '#ff2e57',
+                        },
+                      }}
+                      labels={({datum}) => datum.y}
+                      interpolation="catmullRom"
+                    />
 
-                  <VictoryScatter
-                    data={props.dataArray}
-                    style={{
-                      data: {fill: '#ff2e57'},
-                    }}
-                    size={4}
-                  />
-                </VictoryChart>
+                    <VictoryScatter
+                      data={props.dataArray}
+                      style={{
+                        data: {fill: '#ff2e57'},
+                      }}
+                      size={moderateScale(3)}
+                    />
+                  </VictoryChart>
+                </View>
               ) : (
                 <View style={{flex: 1}}>
                   <SvgIcon icon="ReportNoDataSvgIcon" />
