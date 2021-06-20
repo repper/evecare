@@ -71,6 +71,7 @@ class ReportWeightBmiContainer extends BaseComponent {
       lastWeight: weightReport.lastWeight,
       lastWeightConv: weightReport.lastWeightConv,
       lastWeightDay: weightReport.lastWeightDay,
+      xAxisValues: weightReport.xAxisValues,
       //zoom
       zoomDomain: null,
     };
@@ -109,6 +110,7 @@ class ReportWeightBmiContainer extends BaseComponent {
     try {
       let auth = that.props.auth;
       let dataArray = [];
+      let xAxisValues = [];
       let weightBmi = 0;
       let lastWeight = 0;
       let lastWeightConv = 0;
@@ -133,6 +135,7 @@ class ReportWeightBmiContainer extends BaseComponent {
           kgVal = Number(conVal[0]);
           decimalVal = conVal.length > 1 ? Number(conVal[1]) : 0;
           lastWeight = Number(`${kgVal}.${decimalVal}`);
+          lastWeightConv = lastWeight;
           //Check if we need conversion to lbs
           if (!isInKg) {
             const convWeight = convertKgToLbs(Number([kgVal, decimalVal].join('.')));
@@ -170,7 +173,7 @@ class ReportWeightBmiContainer extends BaseComponent {
           });
 
           const dayDiff = eKey.diff(sKey, 'days');
-          const minDays = 7;
+          const minDays = 14;
           if (dayDiff < minDays) {
             //We will change sKey and eKey to add days start and end
             const remainDays = minDays - dayDiff;
@@ -178,13 +181,17 @@ class ReportWeightBmiContainer extends BaseComponent {
 
             sKey.subtract(daysAddStart, 'days');
             eKey.add(remainDays - daysAddStart, 'days');
+          } else {
+            sKey.subtract(3, 'days');
+            eKey.add(3, 'days');
           }
 
           //Now we will loop till eKey
           while (1) {
             const dateKey = sKey.format('YYYY-MM-DD');
+            const dateInt = sKey.unix();
             let dateWeight = '';
-            console.log(dateKey, '___', that.props.healthLog.dayLog[dateKey]);
+            // console.log(dateKey, '___', that.props.healthLog.dayLog[dateKey]);
             if (
               that.props.healthLog.dayLog[dateKey] &&
               that.props.healthLog.dayLog[dateKey].weight &&
@@ -203,19 +210,18 @@ class ReportWeightBmiContainer extends BaseComponent {
               } else {
                 dateWeight = dayWeight;
               }
+              dataArray.push({
+                y: dateWeight,
+                date: dateKey,
+                x: dateInt,
+              });
             }
-            dataArray.push({
-              y: dateWeight,
-              date: dateKey,
-              x: `${sKey.format('D')}`,
-            });
+            xAxisValues.push(dateInt);
             sKey.add(1, 'days');
             if (sKey.isAfter(eKey)) {
               break;
             }
           }
-
-          console.log('####', sKey.format('YYYY-MM-DD'), eKey.format('YYYY-MM-DD'), dataArray);
         }
       }
 
@@ -242,6 +248,7 @@ class ReportWeightBmiContainer extends BaseComponent {
       if (returnVal) {
         return {
           dataArray,
+          xAxisValues,
           weightBmi,
           lastWeight,
           lastWeightConv,
@@ -250,6 +257,7 @@ class ReportWeightBmiContainer extends BaseComponent {
       } else {
         that.setState({
           dataArray,
+          xAxisValues,
           weightBmi,
           lastWeight,
           lastWeightConv,
@@ -290,20 +298,21 @@ class ReportWeightBmiContainer extends BaseComponent {
   };
 
   handleZoom = domain => {
+    console.log('#$@#@', domain);
     this.setState({zoomDomain: domain});
   };
 
   render() {
     return (
       <ReportWeightBmi
+        {...this.state}
+        {...this.props}
         updateState={this.setState.bind(this)}
         clickOnAddWeight={this.clickOnAddWeight}
         clickOnAddHeight={this.clickOnAddHeight}
         openDropdownModal={this.openDropdownModal}
         getSelectedReport={this.getSelectedReport}
         handleZoom={this.handleZoom}
-        {...this.state}
-        {...this.props}
       />
     );
   }
