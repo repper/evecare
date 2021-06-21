@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Shadow, ShadowFlex} from 'react-native-neomorph-shadows';
+import { Shadow, ShadowFlex } from 'react-native-neomorph-shadows';
 import {
   VictoryChart,
   VictoryTheme,
@@ -22,18 +22,18 @@ import {
 import moment from 'moment';
 
 import Icon from '../../fonts/eveCareFont';
-import {colors, textStyles, globalStyle as gs} from '../../config/styles';
+import { colors, textStyles, globalStyle as gs } from '../../config/styles';
 import cs from '../../config/commonStyles';
-import {Text as PeoText, PoppinsTextRegular, PoppinsTextMedium} from '../../components/Text';
-import {scale, verticalScale, moderateScale} from '../../lib/scalingUtils';
+import { Text as PeoText, PoppinsTextRegular, PoppinsTextMedium } from '../../components/Text';
+import { scale, verticalScale, moderateScale } from '../../lib/scalingUtils';
 import WightSvgIcon from '../../components/SvgIcon/weightSvgIcon';
 import DropDownPicker from '../../components/DropDownPicker';
 import RoundeShapeButtonIcon from '../../components/SvgIcon/roundeShapeButtonIcon';
 import SvgIcon from '../../components/SvgIcon/icon';
-import {FlatList} from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 
 const window = Dimensions.get('window');
-const {height, width} = window;
+const { height, width } = window;
 const totalWidth = width - moderateScale(50);
 const middleDataPoints = 5; //the divisor has to be in odd numbers
 const dataPoints = 0.9 / middleDataPoints;
@@ -44,9 +44,9 @@ const widthMargin = totalWidth / barsCount; //To find width of single value in B
 const perRowItems = 2;
 
 const ReportWeightBmi = props => {
-  const {updateState} = props;
+  const { updateState } = props;
   const bmiPoints = [];
-  let bmiColors = {'0': props.bmiIndicatorArr[0].color};
+  let bmiColors = { '0': props.bmiIndicatorArr[0].color };
   let colorIndexToCheck = 1;
   let textColor = '#8e44ad';
   for (let indexer = startRange; indexer <= endRange; indexer += dataPoints) {
@@ -85,19 +85,19 @@ const ReportWeightBmi = props => {
 
   return (
     <SafeAreaView style={gs.safeArea}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
         {props.dataArray && props.dataArray.length > 0 ? (
           <View style={styles.container}>
             <ShadowFlex style={styles.weightView}>
               <LinearGradient
                 style={styles.gradient}
                 colors={['#FFFFFF', '#fceff6']}
-                start={{x: 0, y: 1}}
-                end={{x: 1, y: 1}}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
               >
                 <View style={styles.topRowView}>
                   <WightSvgIcon width={moderateScale(23)} height={moderateScale(23)} />
-                  <PoppinsTextRegular color={29} fontSize={16} style={{marginLeft: moderateScale(20)}}>
+                  <PoppinsTextRegular color={29} fontSize={16} style={{ marginLeft: moderateScale(20) }}>
                     Weight
                   </PoppinsTextRegular>
                 </View>
@@ -109,11 +109,11 @@ const ReportWeightBmi = props => {
                     <PoppinsTextMedium
                       color={26}
                       fontSize={24}
-                      style={{includeFontPadding: false, height: moderateScale(33)}}
+                      style={{ includeFontPadding: false, height: moderateScale(33) }}
                     >
                       {`${props.lastWeightConv} ${props.units.weight}`}
                     </PoppinsTextMedium>
-                    <PoppinsTextMedium color={26} fontSize={13} style={{opacity: 0.5}}>
+                    <PoppinsTextMedium color={26} fontSize={13} style={{ opacity: 0.5 }}>
                       as on {`${moment(props.lastWeightDay).format('DD-MMM')}`}
                     </PoppinsTextMedium>
                   </View>
@@ -122,7 +122,7 @@ const ReportWeightBmi = props => {
                 )}
                 <View>
                   <TouchableOpacity activeOpacity={0.5} onPress={props.openDropdownModal}>
-                    <View style={[gs.weekMainView, {alignSelf: 'flex-start'}]}>
+                    <View style={[gs.weekMainView, { alignSelf: 'flex-start' }]}>
                       <View style={gs.weekSubView}>
                         <PoppinsTextRegular color={26} fontSize={12}>
                           {props.selectedReportLabel}
@@ -137,8 +137,8 @@ const ReportWeightBmi = props => {
 
                   <DropDownPicker
                     items={props.dropDownItems}
-                    containerStyle={{height: 0, width: 0}}
-                    style={{backgroundColor: 'transparent'}}
+                    containerStyle={{ height: 0, width: 0 }}
+                    style={{ backgroundColor: 'transparent' }}
                     itemStyle={{
                       justifyContent: 'flex-start',
                     }}
@@ -149,9 +149,9 @@ const ReportWeightBmi = props => {
                 </View>
               </View>
               {props.dataArray.length > 0 ? (
-                <View style={{paddingLeft: moderateScale(10)}}>
+                <View style={{ paddingLeft: moderateScale(10) }}>
                   <VictoryChart
-                    domain={{y: [0, 90]}}
+                    domain={{ y: [0, 90] }}
                     theme={VictoryTheme.material}
                     height={moderateScale(300)}
                     width={width - moderateScale(10)}
@@ -167,7 +167,11 @@ const ReportWeightBmi = props => {
                     <VictoryAxis
                       standalone={false}
                       tickValues={props.xAxisValues}
-                      tickFormat={t => moment.unix(t).format('D')}
+                      tickFormat={t => {
+                        if (moment.unix(t).format('D') % 5 === 0) {
+                          return moment.unix(t).format('D');
+                        }
+                      }}
                       label="Date"
                       axisLabelComponent={<VictoryLabel dy={moderateScale(20)} />}
                     />
@@ -185,9 +189,9 @@ const ReportWeightBmi = props => {
                       }
                       orientation="top"
                       style={{
-                        grid: {stroke: 'transparent'},
-                        axis: {stroke: 'transparent'},
-                        ticks: {stroke: 'transparent'},
+                        grid: { stroke: 'transparent' },
+                        axis: { stroke: 'transparent' },
+                        ticks: { stroke: 'transparent' },
                       }}
                     />
                     <VictoryArea
@@ -198,28 +202,28 @@ const ReportWeightBmi = props => {
                           stroke: '#ff2e57',
                         },
                       }}
-                      labels={({datum}) => datum.y}
+                      labels={({ datum }) => datum.y}
                       interpolation="catmullRom"
                     />
 
                     <VictoryScatter
                       data={props.dataArray}
                       style={{
-                        data: {fill: '#ff2e57'},
+                        data: { fill: '#ff2e57' },
                       }}
                       size={moderateScale(3)}
                     />
                   </VictoryChart>
                 </View>
               ) : (
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <SvgIcon icon="ReportNoDataSvgIcon" />
                 </View>
               )}
             </ShadowFlex>
 
             <TouchableOpacity activeOpacity={0.5} onPress={props.clickOnAddWeight}>
-              <View style={{alignSelf: 'center', marginTop: moderateScale(15)}}>
+              <View style={{ alignSelf: 'center', marginTop: moderateScale(15) }}>
                 <Shadow style={styles.innerShadowView}>
                   <View style={styles.addLogView}>
                     <PoppinsTextRegular color={25} fontSize={18}>
@@ -237,12 +241,12 @@ const ReportWeightBmi = props => {
               <LinearGradient
                 style={styles.gradient}
                 colors={['#FFFFFF', '#fceff6']}
-                start={{x: 0, y: 1}}
-                end={{x: 1, y: 1}}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
               >
                 <View style={styles.topRowView}>
                   <Icon name="bmi" size={22} />
-                  <PoppinsTextRegular color={29} fontSize={16} style={{marginLeft: moderateScale(20)}}>
+                  <PoppinsTextRegular color={29} fontSize={16} style={{ marginLeft: moderateScale(20) }}>
                     BMI Calculator
                   </PoppinsTextRegular>
                 </View>
@@ -254,21 +258,21 @@ const ReportWeightBmi = props => {
                     <PoppinsTextMedium
                       //color={41}
                       fontSize={24}
-                      style={{includeFontPadding: false, color: textColor}}
+                      style={{ includeFontPadding: false, color: textColor }}
                     >
                       {`${props.weightBmi.toFixed(2)}`}
                     </PoppinsTextMedium>
-                    <PoppinsTextMedium color={26} fontSize={13} style={{opacity: 0.5}}>
+                    <PoppinsTextMedium color={26} fontSize={13} style={{ opacity: 0.5 }}>
                       as on {props.dataArray[props.dataArray.length - 1].x.replace(/\n/g, ' ')}
                     </PoppinsTextMedium>
                   </View>
                 ) : (
-                  <View style={{flex: 1}} />
+                  <View style={{ flex: 1 }} />
                 )}
 
                 <View>
                   <TouchableOpacity activeOpacity={0.5} onPress={props.clickOnAddHeight}>
-                    <View style={[gs.weekMainView, {alignSelf: 'flex-start'}]}>
+                    <View style={[gs.weekMainView, { alignSelf: 'flex-start' }]}>
                       <View style={gs.weekSubView}>
                         <PoppinsTextRegular color={26} fontSize={12}>
                           Height
@@ -277,7 +281,7 @@ const ReportWeightBmi = props => {
                           name="edit"
                           color={'#2d2d2d'}
                           size={20}
-                          style={{marginLeft: moderateScale(10)}}
+                          style={{ marginLeft: moderateScale(10) }}
                         />
                       </View>
                       <RoundeShapeButtonIcon />
@@ -353,7 +357,7 @@ const ReportWeightBmi = props => {
                               }}
                             >
                               {showText ? (
-                                <PoppinsTextMedium color={26} fontSize={13} style={{opacity: 0.5}}>
+                                <PoppinsTextMedium color={26} fontSize={13} style={{ opacity: 0.5 }}>
                                   {`${bmiCount}`}
                                 </PoppinsTextMedium>
                               ) : null}
@@ -371,7 +375,7 @@ const ReportWeightBmi = props => {
                   >
                     {listItems.map((istItem, idx) => {
                       return (
-                        <View style={{flexDirection: 'row'}} key={`mainListItem_${idx}`}>
+                        <View style={{ flexDirection: 'row' }} key={`mainListItem_${idx}`}>
                           {istItem.map((item, index) => {
                             return (
                               <View
@@ -384,11 +388,11 @@ const ReportWeightBmi = props => {
                                   flex: 1,
                                 }}
                               >
-                                <View style={[styles.smallCircleView, {backgroundColor: item.color}]} />
+                                <View style={[styles.smallCircleView, { backgroundColor: item.color }]} />
                                 <PoppinsTextRegular
                                   color={3}
                                   fontSize={11}
-                                  style={{marginLeft: moderateScale(10)}}
+                                  style={{ marginLeft: moderateScale(10) }}
                                 >
                                   {`${item.title} (${item.value})`}
                                 </PoppinsTextRegular>
@@ -414,7 +418,7 @@ const ReportWeightBmi = props => {
               Record at least one reading to see analysis
             </PoppinsTextRegular>
             <TouchableOpacity activeOpacity={0.5} onPress={props.clickOnAddWeight}>
-              <View style={{alignSelf: 'center', marginTop: moderateScale(15)}}>
+              <View style={{ alignSelf: 'center', marginTop: moderateScale(15) }}>
                 <Shadow style={styles.innerShadowView}>
                   <View style={styles.addLogView}>
                     <PoppinsTextRegular color={25} fontSize={18}>
@@ -457,7 +461,7 @@ const styles = StyleSheet.create({
   weightView: {
     margin: moderateScale(10),
     borderRadius: moderateScale(12),
-    shadowOffset: {width: 1, height: 2},
+    shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 5,
     shadowRadius: 5,
     backgroundColor: colors.white,
@@ -468,7 +472,7 @@ const styles = StyleSheet.create({
   weightView1: {
     margin: moderateScale(10),
     borderRadius: moderateScale(12),
-    shadowOffset: {width: 1, height: 2},
+    shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 5,
     shadowRadius: 5,
     backgroundColor: colors.white,
@@ -529,7 +533,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(23),
     backgroundColor: colors.white,
     alignSelf: 'center',
-    shadowOffset: {width: 0.1, height: 0.1},
+    shadowOffset: { width: 0.1, height: 0.1 },
     shadowOpacity: 0.5,
     shadowColor: '#ff2e56',
   },
@@ -543,7 +547,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(23),
     backgroundColor: colors.white,
     alignSelf: 'center',
-    shadowOffset: {width: 0.1, height: 0.1},
+    shadowOffset: { width: 0.1, height: 0.1 },
     shadowOpacity: 0.5,
     shadowColor: '#ff2e56',
     marginBottom: moderateScale(20),
@@ -578,7 +582,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderRightColor: 'transparent',
     borderTopColor: 'white',
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
     position: 'absolute',
     right: 0,
     bottom: 0,
